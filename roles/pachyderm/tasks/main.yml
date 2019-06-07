@@ -1,0 +1,18 @@
+---
+# tasks file for pachyderm
+- name: get PATH
+  shell: echo $PATH
+  register: path
+
+- name: download pachctl
+  include: pachctl.yml
+
+- name: download kubectl
+  include: kubectl.yml
+  
+- name: run pachyderm deployment
+  environment:
+    PATH: "{{ path.stdout }}:/opt/ansible"
+  shell: |
+    pachctl deploy local
+  when: pachctl_stats.stat.exists == False

@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: openaihub.ibm.com
+  kind: Pachyderm
+  role: /opt/ansible/roles/pachyderm

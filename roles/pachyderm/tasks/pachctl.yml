@@ -1,0 +1,18 @@
+- name: Check whether pachctl exists
+  stat:
+    path: /opt/ansible/pachctl
+  register: pachctl_stats
+
+- name: Download pachctl
+  block:
+    - get_url: 
+        url: https://github.com/pachyderm/pachyderm/releases/download/v{{ pachyderm.pachctl_version }}/pachctl_{{ pachyderm.pachctl_version }}_linux_amd64.tar.gz
+        dest: "/tmp/pachctl.tgz"
+    - shell: |
+        tar zxvf /tmp/pachctl.tgz
+    - copy:
+        src: "pachctl_{{ pachyderm.pachctl_version }}_linux_amd64/pachctl"
+        dest: "/opt/ansible/pachctl"
+        mode: 0744    
+  when: pachctl_stats.stat.exists == False
+  
